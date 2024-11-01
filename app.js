@@ -1,13 +1,18 @@
 require("dotenv").config()
 
 const express = require('express')
+const ExpenseRouter = require("./Routes/expenses.routers")
 
 const app = express()
+
+app.use(express.json())
 
 
 app.get('/test',(req,res)=>{
     res.send('<h1>HealthCheck Router</h1>')
 })
+
+app.use('/api/v1',ExpenseRouter)
 
 
 const port = process.env.PORT || 3000
