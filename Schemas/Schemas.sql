@@ -3,5 +3,5 @@ CREATE TABLE expenses (
     title VARCHAR(255) NOT NULL,
     amount DECIMAL(10, 2) NOT NULL,
     category VARCHAR(50),
-    date DATE DEFAULT CURRENT_DATE
+    date DATE DEFAULT (CURRENT_DATE)
 );
