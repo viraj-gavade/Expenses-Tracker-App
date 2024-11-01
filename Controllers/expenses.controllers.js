@@ -1,4 +1,4 @@
-const { GetAllExpenses, DeleteAllExpenses, AddExpenses, GetSingleExpenses, DeleteSingleExpenses, SortExpenses } = require('../database')
+const { GetAllExpenses, DeleteAllExpenses, AddExpenses, GetSingleExpenses, DeleteSingleExpenses, SortExpenses } = require('../Database/database.expenses')
 
 const asyncHandler = require('../utils/asyncHandler')
 
@@ -43,6 +43,5 @@ module.exports = {
     deletesingleexpense,
     deleteallexpense,
     addexpense,
-    sortexpenses,
     getsingleexpense
 }
