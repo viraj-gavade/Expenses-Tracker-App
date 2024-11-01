@@ -73,6 +73,14 @@ const DeleteSingleExpenses = async(id)=>{
     return rows[0]
 }
 
-// GetAllExpenses()
-GetSingleExpenses(10)
-SortExpenses()
+module.exports ={
+    DeleteAllExpenses,
+    DeleteAllExpenses,
+    AddExpenses,
+    GetAllExpenses,
+    SortExpenses,
+    GetSingleExpenses,
+    DeleteSingleExpenses
+
+
+}
