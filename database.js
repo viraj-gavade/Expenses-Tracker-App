@@ -38,7 +38,6 @@ const SortExpenses = async( sortBy='amount',order='ASC' )=>{
 
 
 const GetSingleExpenses = async( id )=>{
-    // const { id } = req.params
     const [rows] = await pool.query(`
         SELECT * FROM expenses
         WHERE id =?`,[id])
@@ -52,7 +51,11 @@ const AddExpenses = async()=>{
         INSERT INTO expenses(title,amount,category)
         VALUES(?,?,?) `,[title,amount,category])
     console.log(rows)
-    return rows[0]
+
+        const { insertId } = rows
+        const result = await GetSingleExpenses(insertId)
+
+    return result
 }
 
 

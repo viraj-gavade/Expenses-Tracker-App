@@ -13,7 +13,8 @@ const sortexpenses = async (req,res)=>{
 }
 
 const getsingleexpense = async (req,res)=>{
-    const result = await GetSingleExpenses()
+    const { id } = req.params
+    const result = await GetSingleExpenses(id)
     res.status(200).json(result)
 }
 
@@ -24,12 +25,14 @@ const addexpense = async (req,res)=>{
 }
 
 const deleteallexpense = async (req,res)=>{
+    
     const result = await DeleteAllExpenses()
     res.status(200).json(result)
 }
 
 const deletesingleexpense = async (req,res)=>{
-    const result = await DeleteSingleExpenses()
+    const { id } = req.params
+    const result = await DeleteSingleExpenses(id)
     res.status(200).json(result)
 }
 
