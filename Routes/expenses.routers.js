@@ -1,16 +1,16 @@
 const express  = require('express')
-const { getallexpenses } = require('../Controllers/expenses.controllers')
+const { getallexpenses, deleteallexpense, addexpense, getsingleexpense, deletesingleexpense, sortexpenses } = require('../Controllers/expenses.controllers')
 const ExpenseRouter = express.Router()
 
 ExpenseRouter.route('/expenses')
 .get(getallexpenses)
-// .delete(DeleteAllExpenses)
-// .post(AddExpenses)
+.delete(deleteallexpense)
+.post(addexpense)
 
 
-// ExpenseRouter.route('/expenses/:id').get(GetSingleExpenses).delete(DeleteSingleExpenses)
+ExpenseRouter.route('/expenses/:id').get(getsingleexpense).delete(deletesingleexpense)
 
-// ExpenseRouter.route('/expenses/sorted').get(SortExpenses)
+ExpenseRouter.route('/expenses/sorted').get(sortexpenses)
 
 
 module.exports = ExpenseRouter
