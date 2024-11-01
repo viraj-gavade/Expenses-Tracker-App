@@ -10,7 +10,6 @@ ExpenseRouter.route('/expenses')
 
 ExpenseRouter.route('/expenses/:id').get(getsingleexpense).delete(deletesingleexpense)
 
-ExpenseRouter.route('/expenses/sorted').get(sortexpenses)
 
 
 module.exports = ExpenseRouter

@@ -12,14 +12,8 @@ const pool = mysql.createPool({
 }).promise()
 
 
-const GetAllExpenses = async()=>{
-    const [rows] = await pool.query('SELECT * FROM expenses')
-    console.log(rows)
-    return rows
-}
 
-const SortExpenses = async( sortBy='amount',order='ASC' )=>{
-    // const { sortBy , order } = req.query
+const GetAllExpenses = async( sortBy='amount',order='ASC' )=>{
     const validSortFields = ['title', 'amount', 'category', 'date'];
     if (!validSortFields.includes(sortBy)) {
         throw new Error('Invalid sort field');
@@ -30,7 +24,6 @@ const SortExpenses = async( sortBy='amount',order='ASC' )=>{
     if (!validOrders.includes(order)) {
         throw new Error('Invalid order');
     }
-    // const { sort } = req.params
     const [rows] = await pool.query(`SELECT * FROM expenses ORDER BY ${sortBy} ${order}`)
     console.log(rows)
     return rows
@@ -45,8 +38,7 @@ const GetSingleExpenses = async( id )=>{
     return rows[0]
 }
 
-const AddExpenses = async()=>{
-    const { title , amount ,category } = req.body
+const AddExpenses = async( title,amount ,category)=>{
     const [rows] = await pool.query(`
         INSERT INTO expenses(title,amount,category)
         VALUES(?,?,?) `,[title,amount,category])
@@ -61,15 +53,12 @@ const AddExpenses = async()=>{
 
 
 const DeleteAllExpenses = async()=>{
-    const { title , amount ,category } = req.body
     const [rows] = await pool.query(`DELETE FROM expenses `)
     console.log(rows)
     return rows[0]
 }
 
 const DeleteSingleExpenses = async(id)=>{
-    // const { id } = req.params
-    const { title , amount ,category } = req.body
     const [rows] = await pool.query(`DELETE FROM expenses 
         WHERE id = ?`,[id])
     console.log(rows)
@@ -81,7 +70,6 @@ module.exports ={
     DeleteAllExpenses,
     AddExpenses,
     GetAllExpenses,
-    SortExpenses,
     GetSingleExpenses,
     DeleteSingleExpenses
 
