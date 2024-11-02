@@ -32,35 +32,68 @@ const getallexpenses = asyncHandler(async (req,res)=>{
 })
 
 const getsingleexpense = asyncHandler(async (req,res)=>{
-    const { id } = req.params
-    if(!id){
-        throw CustomApiError(
-            404,
-            'Id Not Found!'
-        )
-    }
-    const expenses = await GetSingleExpenses(id)
-    if(!expenses){
-        throw CustomApiError(
-            404,
-            'There is no such expense with Id:-',id
-        )
-    }
-    return res.status(200).json(
-        new ApiResponse(
-            200,
-            'Single Expense fetched successfully!',
-            expenses
-        )
-    )
+  try {
+      const { id } = req.params
+      if(!id){
+          throw new 
+          CustomApiError(
+              404,
+              'Id Not Found!'
+          )
+      }
+      const expenses = await GetSingleExpenses(id)
+      if(!expenses){
+          throw CustomApiError(
+              404,
+              'There is no such expense with Id:-',id
+          )
+      }
+      return res.status(200).json(
+          new ApiResponse(
+              200,
+              'Single Expense fetched successfully!',
+              expenses
+          )
+      )
+  } catch (error) {
+    throw new Error(error)
+  }
     
 })
 
 
 const addexpense = asyncHandler(async (req,res)=>{
     const { title , amount ,category } = req.body
-    const result = await AddExpenses(title,amount,category)
-    res.status(200).json(result)
+    if(!(title || amount || category)){
+        throw new CustomApiError(
+            400,
+            'All fields must be provided!'
+        )
+    }
+    const expense = await AddExpenses(title,amount,category)
+    if(!expense){
+        throw new 
+        CustomApiError(
+            404,
+            'Something went wrong while adding the expense!'
+        )
+    }
+    const { insertId } = expense
+    const result = await getsingleexpense(insertId)
+    if(!result){
+        throw new 
+        CustomApiError(
+            404,
+            'Something went wrong while finding the added expense!'
+        )
+    }
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            'Expense added sucessfully!',
+            result
+        )
+    )
 })
 
 const deleteallexpense = asyncHandler(async (req,res)=>{
