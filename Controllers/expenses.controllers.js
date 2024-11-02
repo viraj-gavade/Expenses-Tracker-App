@@ -33,8 +33,27 @@ const getallexpenses = asyncHandler(async (req,res)=>{
 
 const getsingleexpense = asyncHandler(async (req,res)=>{
     const { id } = req.params
-    const result = await GetSingleExpenses(id)
-    res.status(200).json(result)
+    if(!id){
+        throw CustomApiError(
+            404,
+            'Id Not Found!'
+        )
+    }
+    const expenses = await GetSingleExpenses(id)
+    if(!expenses){
+        throw CustomApiError(
+            404,
+            'There is no such expense with Id:-',id
+        )
+    }
+    return res.status(200).json(
+        new ApiResponse(
+            200,
+            'Single Expense fetched successfully!',
+            expenses
+        )
+    )
+    
 })
 
 
