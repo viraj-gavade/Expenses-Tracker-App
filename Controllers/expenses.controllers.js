@@ -1,3 +1,4 @@
+const { json } = require('express')
 const { GetAllExpenses, DeleteAllExpenses, AddExpenses, GetSingleExpenses, DeleteSingleExpenses, SortExpenses } = require('../Database/database.expenses')
 
 const asyncHandler = require('../utils/asyncHandler')
@@ -45,7 +46,7 @@ const getsingleexpense = asyncHandler(async (req,res)=>{
       if(!expenses){
           throw CustomApiError(
               404,
-              'There is no such expense with Id:-',id
+              `There is no such expense with Id:- ${id}`
           )
       }
       return res.status(200).json(
@@ -63,49 +64,90 @@ const getsingleexpense = asyncHandler(async (req,res)=>{
 
 
 const addexpense = asyncHandler(async (req,res)=>{
-    const { title , amount ,category } = req.body
-    if(!(title || amount || category)){
-        throw new CustomApiError(
-            400,
-            'All fields must be provided!'
-        )
-    }
-    const expense = await AddExpenses(title,amount,category)
-    if(!expense){
+  try {
+      const { title , amount ,category } = req.body
+      if(!(title || amount || category)){
+          throw new CustomApiError(
+              400,
+              'All fields must be provided!'
+          )
+      }
+      const expense = await AddExpenses(title,amount,category)
+      if(!expense){
+          throw new 
+          CustomApiError(
+              404,
+              'Something went wrong while adding the expense!'
+          )
+      }
+      const { insertId } = expense
+      const result = await getsingleexpense(insertId)
+      if(!result){
+          throw new 
+          CustomApiError(
+              404,
+              'Something went wrong while finding the added expense!'
+          )
+      }
+      return res.status(200).json(
+          new ApiResponse(
+              200,
+              'Expense added sucessfully!',
+              result
+          )
+      )
+  } catch (error) {
+    throw new CustomApiError(error)
+  }
+})
+
+const deleteallexpense = asyncHandler(async (req,res)=>{
+    
+  try {
+      const expense = await DeleteAllExpenses()
+      if(!expense){
         throw new 
         CustomApiError(
             404,
             'Something went wrong while adding the expense!'
         )
     }
-    const { insertId } = expense
-    const result = await getsingleexpense(insertId)
-    if(!result){
-        throw new 
-        CustomApiError(
-            404,
-            'Something went wrong while finding the added expense!'
-        )
-    }
     return res.status(200).json(
         new ApiResponse(
             200,
-            'Expense added sucessfully!',
-            result
+            "All expenses deleted successfully!"
         )
     )
-})
-
-const deleteallexpense = asyncHandler(async (req,res)=>{
-    
-    const result = await DeleteAllExpenses()
-    res.status(200).json(result)
+  } catch (error) {
+    throw new CustomApiError(error)
+  }
 })
 
 const deletesingleexpense = asyncHandler( async (req,res)=>{
-    const { id } = req.params
-    const result = await DeleteSingleExpenses(id)
-    res.status(200).json(result)
+  try {
+      const { id } = req.params
+      if(!id){
+        throw new CustomApiError(
+            404,
+            'Id not found!'
+        )
+      }
+      const expense = await DeleteSingleExpenses(id)
+      if(!expense){
+        throw new CustomApiError(
+            200,
+            `There is no such expense with Id:- ${id}`
+        )
+      }
+      return res.status(200).json(
+        new ApiResponse(
+            200,
+            'Expense deleted successfully!'
+        )
+      )
+  } catch (error) {
+    throw new CustomApiError(error)
+  }
 })
 
 
