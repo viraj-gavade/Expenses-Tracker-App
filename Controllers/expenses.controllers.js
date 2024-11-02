@@ -2,12 +2,33 @@ const { GetAllExpenses, DeleteAllExpenses, AddExpenses, GetSingleExpenses, Delet
 
 const asyncHandler = require('../utils/asyncHandler')
 
+const CustomApiError = require('../utils/CustomApiError')
+
+const ApiResponse = require('../utils/CustomApiResponse')
+
+
 
 const getallexpenses = asyncHandler(async (req,res)=>{
-    const { sortBy , order } = req.query
-    console.log(sortBy,order)
-    const result = await GetAllExpenses(sortBy,order)
-    res.status(200).json(result)
+   try {
+     const { sortBy , order } = req.query
+     console.log(sortBy,order)
+     const expenses = await GetAllExpenses(sortBy,order)
+     if(!expenses){
+        throw new CustomApiError(
+            404,
+            'Expenses Not Found!'
+        )
+     }
+     return res.status(200).json(
+        new ApiResponse(
+            200,
+            'Expenses fetched Sucessfully!',
+            expenses
+        )
+     )
+   } catch (error) {
+     throw new Error(error)
+   }
 })
 
 const getsingleexpense = asyncHandler(async (req,res)=>{
