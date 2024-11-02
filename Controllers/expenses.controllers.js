@@ -44,7 +44,7 @@ const getsingleexpense = asyncHandler(async (req,res)=>{
       }
       const expenses = await GetSingleExpenses(id)
       if(!expenses){
-          throw CustomApiError(
+          throw new CustomApiError(
               404,
               `There is no such expense with Id:- ${id}`
           )
@@ -80,23 +80,15 @@ const addexpense = asyncHandler(async (req,res)=>{
               'Something went wrong while adding the expense!'
           )
       }
-      const { insertId } = expense
-      const result = await getsingleexpense(insertId)
-      if(!result){
-          throw new 
-          CustomApiError(
-              404,
-              'Something went wrong while finding the added expense!'
-          )
-      }
       return res.status(200).json(
           new ApiResponse(
               200,
               'Expense added sucessfully!',
-              result
+              expense
           )
       )
   } catch (error) {
+    console.log(error)
     throw new CustomApiError(error)
   }
 })
@@ -133,12 +125,6 @@ const deletesingleexpense = asyncHandler( async (req,res)=>{
         )
       }
       const expense = await DeleteSingleExpenses(id)
-      if(!expense){
-        throw new CustomApiError(
-            200,
-            `There is no such expense with Id:- ${id}`
-        )
-      }
       return res.status(200).json(
         new ApiResponse(
             200,
@@ -146,6 +132,7 @@ const deletesingleexpense = asyncHandler( async (req,res)=>{
         )
       )
   } catch (error) {
+    console.log(error)
     throw new CustomApiError(error)
   }
 })
