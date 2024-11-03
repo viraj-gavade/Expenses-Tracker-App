@@ -65,13 +65,41 @@ const DeleteSingleExpenses = async(id)=>{
     return rows[0]
 }
 
+const TotalExpenses = async ()=>{
+    const [rows] = await pool.query(`SELECT 
+    SUM(amount) AS total_expenses
+FROM 
+    expenses
+WHERE 
+    YEAR(date) = YEAR(CURDATE()) AND MONTH(date) = MONTH(CURDATE());
+`)
+    console.log(rows)
+    return rows[0].total_expenses || 0
+}
+
+const MonthlyExpenses = async ()=>{
+    const [rows] = await pool.query(`SELECT 
+    SUM(amount) AS total_expenses
+FROM 
+    expenses
+WHERE 
+    YEAR(date) = YEAR(CURDATE()) 
+    AND MONTH(date) = MONTH(CURDATE());
+`)
+    console.log(rows)
+    return rows[0].total_expenses || 0
+}
+// TotalExpenses()
+// MonthlyExpenses()
 module.exports ={
     DeleteAllExpenses,
     DeleteAllExpenses,
     AddExpenses,
     GetAllExpenses,
     GetSingleExpenses,
-    DeleteSingleExpenses
+    DeleteSingleExpenses,
+    TotalExpenses,
+    MonthlyExpenses
 
 
 }

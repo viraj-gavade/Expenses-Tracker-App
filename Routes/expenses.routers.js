@@ -1,5 +1,5 @@
 const express  = require('express')
-const { getallexpenses, deleteallexpense, addexpense, getsingleexpense, deletesingleexpense, sortexpenses } = require('../Controllers/expenses.controllers')
+const { getallexpenses, gettotalexpense,deleteallexpense, addexpense, getsingleexpense, deletesingleexpense, sortexpenses } = require('../Controllers/expenses.controllers')
 const ExpenseRouter = express.Router()
 
 ExpenseRouter.route('/expenses')
@@ -9,6 +9,7 @@ ExpenseRouter.route('/expenses')
 
 
 ExpenseRouter.route('/expenses/:id').get(getsingleexpense).delete(deletesingleexpense)
+ExpenseRouter.route('/expenses/total').get(gettotalexpense)
 
 
 

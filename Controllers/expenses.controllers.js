@@ -1,5 +1,5 @@
 const { json } = require('express')
-const { GetAllExpenses, DeleteAllExpenses, AddExpenses, GetSingleExpenses, DeleteSingleExpenses, SortExpenses } = require('../Database/database.expenses')
+const { GetAllExpenses, DeleteAllExpenses, AddExpenses, GetSingleExpenses, DeleteSingleExpenses, SortExpenses, TotalExpenses,MonthlyExpenses } = require('../Database/database.expenses')
 
 const asyncHandler = require('../utils/asyncHandler')
 
@@ -14,6 +14,8 @@ const getallexpenses = asyncHandler(async (req,res)=>{
      const { sortBy , order } = req.query
      console.log(sortBy,order)
      const expenses = await GetAllExpenses(sortBy,order)
+     const total_expenses = await TotalExpenses()
+     const monthly_expenses = await MonthlyExpenses()
      if(!expenses){
         throw new CustomApiError(
             404,
@@ -27,8 +29,12 @@ const getallexpenses = asyncHandler(async (req,res)=>{
     //         expenses
     //     )
     //  )
+    // console.log(total_expenses)
+    // console.log(expenses)
     return res.render('home.ejs',{
-      expenses:expenses
+      expenses:expenses,
+      total_expenses:total_expenses,
+      monthly_expenses:monthly_expenses
     })
    } catch (error) {
      throw new Error(error)
@@ -135,6 +141,29 @@ const deletesingleexpense = asyncHandler( async (req,res)=>{
   }
 })
 
+const gettotalexpense = asyncHandler(async (req,res,next)=>{
+  try {
+      const expenses = await TotalExpenses()
+      if(!expenses){
+          throw new CustomApiError(
+              404,
+              `Something Went Wrong while getting total expense`
+          )
+      }
+      return res.status(200).json(
+          new ApiResponse(
+              200,
+              'Single Expense fetched successfully!',
+              expenses
+          )
+      )
+  } catch (error) {
+    throw new Error(error)
+  }
+    
+})
+
+
 
 
 
@@ -143,5 +172,6 @@ module.exports = {
     deletesingleexpense,
     deleteallexpense,
     addexpense,
-    getsingleexpense
+    getsingleexpense,
+    gettotalexpense
 }
