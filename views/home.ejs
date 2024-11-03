@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <style>
+    body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+}
+
+h1, h2 {
+  color: #333;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+li {
+  background: #f4f4f4;
+  margin: 10px 0;
+  padding: 10px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+form {
+  display: inline;
+}
+
+  </style>
+</head>
+<body>
+  <h1>Expense Tracker</h1>
+
+  <!-- Expense List -->
+  <section>
+    <h2>All Expenses</h2>
+    <ul>
+      <% expenses.forEach(expense => { %>
+        <li>
+          <strong><%= expense.title %></strong>: $<%= expense.amount %> - <%= expense.category %>
+          <form action="/api/v1/expenses/<%= expense._id %>?_method=DELETE" method="POST">
+            <button type="submit">Delete</button>
+          </form>
+        </li>
+      <% }) %>
+    </ul>
+  </section>
+
+  <!-- Add New Expense Form -->
+  <section>
+    <h2>Add New Expense</h2>
+    <form action="/api/v1/expenses/" method="POST">
+      <input type="text" name="title" placeholder="Title" required>
+      <input type="number" name="amount" placeholder="Amount" required>
+      <input type="text" name="category" placeholder="Category" required>
+      <button type="submit">Add Expense</button>
+    </form>
+  </section>
+</body>
+</html>

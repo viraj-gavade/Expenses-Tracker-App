@@ -20,13 +20,16 @@ const getallexpenses = asyncHandler(async (req,res)=>{
             'Expenses Not Found!'
         )
      }
-     return res.status(200).json(
-        new ApiResponse(
-            200,
-            'Expenses fetched Sucessfully!',
-            expenses
-        )
-     )
+    //  return res.status(200).json(
+    //     new ApiResponse(
+    //         200,
+    //         'Expenses fetched Sucessfully!',
+    //         expenses
+    //     )
+    //  )
+    return res.render('home.ejs',{
+      expenses:expenses
+    })
    } catch (error) {
      throw new Error(error)
    }
