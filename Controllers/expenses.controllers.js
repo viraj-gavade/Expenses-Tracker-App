@@ -100,13 +100,6 @@ const deleteallexpense = asyncHandler(async (req,res)=>{
     
   try {
       const expense = await DeleteAllExpenses()
-      if(!expense){
-        throw new 
-        CustomApiError(
-            404,
-            'Something went wrong while adding the expense!'
-        )
-    }
     return res.status(200).json(
         new ApiResponse(
             200,
@@ -114,6 +107,7 @@ const deleteallexpense = asyncHandler(async (req,res)=>{
         )
     )
   } catch (error) {
+    console.log(error)
     throw new CustomApiError(error)
   }
 })
