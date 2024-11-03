@@ -130,6 +130,7 @@ const deletesingleexpense = asyncHandler( async (req,res)=>{
       )
   } catch (error) {
     console.log(error)
+    console.log(error)
     throw new CustomApiError(error)
   }
 })

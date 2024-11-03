@@ -278,7 +278,7 @@
     <nav class="navbar">
       <h1>Expense Tracker</h1>
       <ul>
-        <li><a href="/login">Login</a></li>
+        <li><a href="./signin.ejs">Login</a></li>
         <li><a href="/signup">Signup</a></li>
         <li><button id="add-expense-btn">Add Expense</button></li>
       </ul>
@@ -308,8 +308,8 @@
           <span class="expense-amount">$<%= expense.amount %></span>
           <span class="expense-category"><%= expense.category %></span>
         </div>
-        <form action="/api/v1/expenses/<%= expense._id %>?_method=DELETE" method="POST" class="delete-form">
-          <input type="hidden" name="_id" value="<%= expense._id %>">
+        <form action="/api/v1/expenses/<%= expense.id %>?_method=DELETE" method="POST" class="delete-form">
+          <input type="hidden" name="_id" value="<%= expense.id %>">
           <button class="delete-btn" type="submit">Delete</button>
         </form>
       </li>
@@ -380,8 +380,8 @@ document.querySelectorAll('.delete-form').forEach(form => {
     const expenseId = form.querySelector('input[name="_id"]').value;
     
     try {
-      const response = await fetch(`/expenses/${expenseId}?_method=DELETE`, {
-        method: 'POST',
+      const response = await fetch(`/api/v1/expenses/${expenseId}?_method=DELETE`, {
+        method: 'DELETE',
         headers: {
           'Content-Type': 'application/json'
         }
