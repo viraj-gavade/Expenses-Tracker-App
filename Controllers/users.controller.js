@@ -48,8 +48,8 @@ const accessToken = jwt.sign({
 }
 )
     const expenses = await GetAllExpenses(user.id)
-    const total_expenses = await TotalExpenses()
-    const monthly_expenses = await MonthlyExpenses()
+    const total_expenses = await TotalExpenses(user.id)
+    const monthly_expenses = await MonthlyExpenses(user.id)
 
     return res.cookie('accessToken',accessToken).cookie('refreshtoken',refreshToken).render('home',{
         user:user,
