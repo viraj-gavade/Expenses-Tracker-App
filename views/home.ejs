@@ -307,6 +307,11 @@
           <span class="expense-title"><strong><%= expense.title %></strong></span>
           <span class="expense-amount">$<%= expense.amount %></span>
           <span class="expense-category"><%= expense.category %></span>
+            <% const date = new Date(expense.date); %>
+            <span class="expense-category">
+              <!-- Format as DD MMM YYYY (e.g., 04 Nov 2024) -->
+              <p><%= date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear() %></p>
+            </span>
         </div>
         <form action="/api/v1/expenses/<%= expense.id %>?_method=DELETE" method="POST" class="delete-form">
           <input type="hidden" name="_id" value="<%= expense.id %>">
