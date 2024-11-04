@@ -7,6 +7,8 @@ const CustomApiError = require('../utils/CustomApiError')
 
 const ApiResponse = require('../utils/CustomApiResponse')
 
+
+
 const loginuser = asyncHandler(async(req,res)=>{
     const { username , password,email } = req.body
     if((!(username || email) || !password)){
@@ -24,7 +26,6 @@ const loginuser = asyncHandler(async(req,res)=>{
             'Incorrect Username and Password Combination!'
         )
     }
-
     console.log(user.id)
     const expenses = await GetAllExpenses(user.id)
     const total_expenses = await TotalExpenses()
