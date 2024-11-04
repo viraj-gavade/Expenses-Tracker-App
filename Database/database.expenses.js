@@ -13,18 +13,19 @@ const pool = mysql.createPool({
 
 
 
-const GetAllExpenses = async( sortBy='amount',order='ASC' )=>{
-    const validSortFields = ['title', 'amount', 'category', 'date'];
-    if (!validSortFields.includes(sortBy)) {
-        throw new Error('Invalid sort field');
-    }
+const GetAllExpenses = async(id)=>{
+    // const validSortFields = ['title', 'amount', 'category', 'date'];
+    // if (!validSortFields.includes(sortBy)) {
+    //     throw new Error('Invalid sort field');
+    // }
 
-    // Validate the order
-    const validOrders = ['ASC', 'DESC'];
-    if (!validOrders.includes(order)) {
-        throw new Error('Invalid order');
-    }
-    const [rows] = await pool.query(`SELECT * FROM expenses ORDER BY ${sortBy} ${order}`)
+    // // Validate the order
+    // const validOrders = ['ASC', 'DESC'];
+    // if (!validOrders.includes(order)) {
+    //     throw new Error('Invalid order');
+    // }
+    const [rows] = await pool.query(`SELECT * FROM expenses
+        WHERE user_id = ? `,[id])
     console.log(rows)
     return rows
 }

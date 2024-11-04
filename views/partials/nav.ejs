@@ -52,9 +52,9 @@
     <h1>Expense Tracker</h1>
     <ul>
       <% if (locals.user) { %>
-      <li><a href="/api/v1/user/signup">Viraj Gavade</a></li>
-      <% } %>
+      <li><a href="/api/v1/user/signup"><%= user.username %></a></li>
       <li><button id="add-expense-btn">Add Expense</button></li>
+      <% } %>
       <li><a href="/api/v1/user/signin">Login</a></li>
       <li><a href="/api/v1/signup">Signup</a></li>
     </ul>
