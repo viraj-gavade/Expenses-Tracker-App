@@ -14,10 +14,10 @@ const pool = mysql.createPool({
 
 
 
-const LoginUser = async (username , Userpassword) =>{
+const LoginUser = async (username , Userpassword ,email='') =>{
 
     const [user] = await pool.query(`SELECT * FROM users
-        WHERE username =?`,[username])
+        WHERE username =? OR email = ?`,[username,email])
         // console.log(user)
         const [{ password }] = user
         // console.log(password)

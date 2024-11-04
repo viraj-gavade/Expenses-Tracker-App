@@ -18,7 +18,7 @@ app.get('/test',(req,res)=>{
 })
 
 app.use('/api/v1',ExpenseRouter)
-app.use('/api/v1/', UserRouter);
+app.use('/api/v1/user', UserRouter);
 
 
 const port = process.env.PORT || 3000
