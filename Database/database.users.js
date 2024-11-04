@@ -42,8 +42,20 @@ const SignUpUser = async ( username , email , password )=>{
     return user[0]
 }
 
+const findUser = async (id ) =>{
+    const user =  await pool.query(`
+        SELECT * FROM users
+        Where id =?
+
+        `,[id])
+        console.log(user)
+        return user[0]
+}
+
+
 module.exports ={
     LoginUser,
-    SignUpUser
+    SignUpUser,
+    findUser
 
 }

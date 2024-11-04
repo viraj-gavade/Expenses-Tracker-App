@@ -74,6 +74,11 @@ const getsingleexpense = asyncHandler(async (req,res)=>{
 
 const addexpense = asyncHandler(async (req,res)=>{
   try {
+
+      console.log(req.user) 
+
+      const [{id}] = req.user
+      console.log(id)
       const { title , amount ,category } = req.body
       if(!(title || amount || category)){
           throw new CustomApiError(
@@ -81,7 +86,8 @@ const addexpense = asyncHandler(async (req,res)=>{
               'All fields must be provided!'
           )
       }
-      const expense = await AddExpenses(title,amount,category)
+
+      const expense = await AddExpenses(title,amount,category,id)
       if(!expense){
           throw new 
           CustomApiError(

@@ -39,11 +39,11 @@ const GetSingleExpenses = async( id )=>{
     return rows[0]
 }
 
-const AddExpenses = async( title,amount ,category)=>{
+const AddExpenses = async( title,amount ,category,user_id)=>{
     const [rows] = await pool.query(`
-        INSERT INTO expenses(title,amount,category)
-        VALUES(?,?,?) `,[title,amount,category])
-    console.log(rows)
+        INSERT INTO expenses(title,amount,category,user_id)
+        VALUES(?,?,?,?) `,[title,amount,category,user_id])
+    // console.log(rows)
 
         const { insertId } = rows
         const result = await GetSingleExpenses(insertId)

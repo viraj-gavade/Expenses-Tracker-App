@@ -1,11 +1,14 @@
 const {LoginUser,SignUpUser } = require('../Database/database.users')
 const { GetAllExpenses,TotalExpenses ,MonthlyExpenses } = require('../Database/database.expenses')
 
+
 const asyncHandler = require('../utils/asyncHandler')
 
 const CustomApiError = require('../utils/CustomApiError')
 
 const ApiResponse = require('../utils/CustomApiResponse')
+
+const jwt = require('jsonwebtoken')
 
 
 
@@ -26,16 +29,34 @@ const loginuser = asyncHandler(async(req,res)=>{
             'Incorrect Username and Password Combination!'
         )
     }
-    console.log(user.id)
+    const refreshToken = jwt.sign({
+        id:user.id,
+        username:user.username
+    },process.env.REFRESH_TOKEN_SECRETE,
+    {
+        expiresIn:process.env.REFRESH_TOKEN_EXPIRY
+    }
+)
+
+const accessToken = jwt.sign({
+    id:user.id,
+    username:user.username,
+    email:user.email
+},process.env.ACCESS_TOKEN_SECRETE,
+{
+    expiresIn:process.env.ACCESS_TOKEN_EXPIRY
+}
+)
     const expenses = await GetAllExpenses(user.id)
     const total_expenses = await TotalExpenses()
     const monthly_expenses = await MonthlyExpenses()
-    console.log(user)
-    return res.render('home',{
+
+    return res.cookie('accessToken',accessToken).cookie('refreshtoken',refreshToken).render('home',{
         user:user,
         expenses:expenses,
       total_expenses:total_expenses,
       monthly_expenses:monthly_expenses
+      
     })
 })
 
