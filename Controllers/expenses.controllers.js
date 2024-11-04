@@ -12,7 +12,6 @@ const ApiResponse = require('../utils/CustomApiResponse')
 const getallexpenses = asyncHandler(async (req,res)=>{
    try {
      const { sortBy , order } = req.query
-     console.log(sortBy,order)
      const expenses = await GetAllExpenses(sortBy,order)
      const total_expenses = await TotalExpenses()
      const monthly_expenses = await MonthlyExpenses()
@@ -22,15 +21,6 @@ const getallexpenses = asyncHandler(async (req,res)=>{
             'Expenses Not Found!'
         )
      }
-    //  return res.status(200).json(
-    //     new ApiResponse(
-    //         200,
-    //         'Expenses fetched Sucessfully!',
-    //         expenses
-    //     )
-    //  )
-    // console.log(total_expenses)
-    // console.log(expenses)
     return res.render('home.ejs',{
       expenses:expenses,
       total_expenses:total_expenses,
@@ -74,11 +64,7 @@ const getsingleexpense = asyncHandler(async (req,res)=>{
 
 const addexpense = asyncHandler(async (req,res)=>{
   try {
-
-      console.log(req.user) 
-
       const [{id}] = req.user
-      console.log(id)
       const { title , amount ,category } = req.body
       if(!(title || amount || category)){
           throw new CustomApiError(
@@ -142,7 +128,6 @@ const deletesingleexpense = asyncHandler( async (req,res)=>{
       )
   } catch (error) {
     console.log(error)
-    console.log(error)
     throw new CustomApiError(error)
   }
 })
@@ -164,7 +149,7 @@ const gettotalexpense = asyncHandler(async (req,res,next)=>{
           )
       )
   } catch (error) {
-    throw new Error(error)
+    console.log(error)
   }
     
 })
