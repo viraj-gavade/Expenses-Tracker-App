@@ -3,6 +3,7 @@ require("dotenv").config()
 const path = require('path')
 const express = require('express')
 const ExpenseRouter = require("./Routes/expenses.routers")
+const UserRouter = require("./Routes/users.routers")
 
 const app = express()
 app.use(express.urlencoded({extended:false}))
@@ -17,6 +18,7 @@ app.get('/test',(req,res)=>{
 })
 
 app.use('/api/v1',ExpenseRouter)
+app.use('/api/v1/', UserRouter);
 
 
 const port = process.env.PORT || 3000
