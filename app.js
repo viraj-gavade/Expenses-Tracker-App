@@ -7,7 +7,10 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors')
 const passport = require('passport')
 const session =require('express-session')
-const OauthRouter = require('./Routes/')
+const OauthRouter = require('./Routes/Oauth2.routers')
+const { ApolloServer } = require('@apollo/server')
+const { expressMiddleware } = require('@apollo/server/express4')
+
 
 
 
@@ -21,6 +24,14 @@ app.use(cookieParser());
 app.use(cors())
 
 
+
+app.use(session({
+    secret: process.env.SECRETE,
+    resave: false,
+    saveUninitialized: true
+}));
+
+
 app.get('/',(req,res)=>{
     return res.render('home')
 })
@@ -28,6 +39,13 @@ app.get('/',(req,res)=>{
 app.use('/api/v1',ExpenseRouter)
 app.use('/api/v1/user', UserRouter);
 
+
+// Initialize Passport.js
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+app.use('/', OauthRouter);
 
 const port = process.env.PORT || 3000
 
