@@ -5,6 +5,7 @@ const express = require('express')
 const ExpenseRouter = require("./Routes/expenses.routers")
 const UserRouter = require("./Routes/users.routers")
 const cookieParser = require('cookie-parser');
+const cors = require('cors')
 
 
 const app = express()
@@ -14,10 +15,11 @@ app.use(express.static('public'));
 app.set('view engine','ejs')
 app.set('views',path.resolve('./views'))
 app.use(cookieParser());
+app.use(cors())
 
 
-app.get('/test',(req,res)=>{
-    res.send('<h1>HealthCheck Router</h1>')
+app.get('/',(req,res)=>{
+    return res.render('home')
 })
 
 app.use('/api/v1',ExpenseRouter)

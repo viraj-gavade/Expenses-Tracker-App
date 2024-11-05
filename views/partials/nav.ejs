@@ -1,68 +1,69 @@
 <style>
   .navbar {
-      width: 100%;
-      max-width: 800px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 15px 20px;
-      background-color: #333;
-      color: white;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
+    width: 100%;
+    max-width: 800px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #333;
+    color: white;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
 
-    .navbar h1 {
-      font-size: 1.5em;
-    }
+  .navbar h1 {
+    font-size: 1.5em;
+  }
 
-    .navbar ul {
-      list-style: none;
-      display: flex;
-      gap: 15px;
-    }
+  .navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 15px;
+  }
 
-    .navbar ul li {
-      display: inline;
-    }
+  .navbar ul li {
+    display: inline;
+  }
 
-    .navbar a, .navbar button {
-      color: white;
-      text-decoration: none;
-      font-size: 1em;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
+  .navbar a, .navbar button {
+    color: white;
+    text-decoration: none;
+    font-size: 1em;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
 
-    .navbar button {
-      padding: 8px 15px;
-      background-color: #007bff;
-      border-radius: 4px;
-      transition: background-color 0.2s ease;
-    }
+  .navbar button {
+    padding: 8px 15px;
+    background-color: #007bff;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+  }
 
-    .navbar button:hover {
-      background-color: #0056b3;
-    }
-
+  .navbar button:hover {
+    background-color: #0056b3;
+  }
 </style>
+
 <div class="container">
   <nav class="navbar">
     <h1>Expense Tracker</h1>
     <ul>
       <% if (locals.user) { %>
-      <li><a href="/api/v1/user/signup"><%= user.username %></a></li>
-      <li><button id="add-expense-btn">Add Expense</button></li>
+        <li><a href="/api/v1/user/profile"><%= user.username %></a></li>
+        <li><button id="add-expense-btn">Add Expense</button></li>
+      <% } else { %>
+        <li><a href="/api/v1/user/signin">Login</a></li>
+        <li><a href="/api/v1/user/signup">Signup</a></li>
       <% } %>
-      <li><a href="/api/v1/user/signin">Login</a></li>
-      <li><a href="/api/v1/signup">Signup</a></li>
     </ul>
   </nav>
 </div>
 
-  <% if (locals.error) { %>
-    <div class="alert alert-danger" role="alert">
-        <%- locals.error %>
-      </div>
+<% if (locals.error) { %>
+  <div class="alert alert-danger" role="alert">
+    <%= error %>
+  </div>
 <% } %>

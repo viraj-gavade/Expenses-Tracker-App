@@ -66,6 +66,7 @@
       border-radius: 4px;
       transition: background-color 0.2s ease;
     }
+    
 
     .navbar button:hover {
       background-color: #0056b3;
@@ -270,6 +271,10 @@
     .submit-btn:hover {
       background-color: #218838;
     }
+
+    ul li{
+      gap: 1rem;
+    }
   </style>
 </head>
 <body>
@@ -278,49 +283,67 @@
     <nav class="navbar">
       <h1>Expense Tracker</h1>
       <ul>
-        <li><a href="/api/v1/user/signin">Login</a></li>
-        <li><a href="/api/v1/user/signup">Signup</a></li>
-        <li><button id="add-expense-btn">Add Expense</button></li>
+        <% if (locals.user) { %>
+          <li><button id="add-expense-btn">Add Expense</button></li>
+          <div>
+          <li><a href="/api/v1/user/profile"><%= user.username %></a></li>
+          <button id="logout-btn">Logout</button>
+
+        <% } else { %>
+          <li><a href="/api/v1/user/signin">Login</a></li>
+          <li><a href="/api/v1/user/signup">Signup</a></li>
+        <% } %>
       </ul>
     </nav>
 
-    <!-- Summary Section -->
-    <div class="summary">
-      <div class="summary-card">
-        <h3>Total Expenses</h3>
-        <div class="amount">$<%=  total_expenses%></div>
-      </div>
-      <div class="summary-card">
-        <h3>Monthly Expenses</h3>
-        <div class="amount">$ <%= monthly_expenses %></div>
-      </div>
-    </div>
-
-    <!-- Expense Section -->
-   <!-- Replace the expense list section with this updated version -->
-<section class="expense-section">
-  <h2>All Expenses</h2>
-  <ul class="expense-list">
-    <% expenses.forEach(expense => { %>
-      <li class="expense-item">
-        <div class="expense-info">
-          <span class="expense-title"><strong><%= expense.title %></strong></span>
-          <span class="expense-amount">$<%= expense.amount %></span>
-          <span class="expense-category"><%= expense.category %></span>
-            <% const date = new Date(expense.date); %>
-            <span class="expense-category">
-              <!-- Format as DD MMM YYYY (e.g., 04 Nov 2024) -->
-              <p><%= date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear() %></p>
-            </span>
+    <% if (!locals.user) { %>
+      <div class="summary">
+        <div class="summary-card">
+          <h3>Total Expenses</h3>
+          <div class="amount">$0</div>
         </div>
-        <form action="/api/v1/expenses/<%= expense.id %>?_method=DELETE" method="POST" class="delete-form">
-          <input type="hidden" name="_id" value="<%= expense.id %>">
-          <button class="delete-btn" type="submit">Delete</button>
-        </form>
-      </li>
-    <% }) %>
-  </ul>
-</section>
+        <div class="summary-card">
+          <h3>Monthly Expenses</h3>
+          <div class="amount">$0</div>
+        </div>
+      </div>
+    <% } else { %>
+          <!-- Summary Section -->
+      <div class="summary">
+        <div class="summary-card">
+          <h3>Total Expenses</h3>
+          <div class="amount">$<%=  total_expenses%></div>
+        </div>
+        <div class="summary-card">
+          <h3>Monthly Expenses</h3>
+          <div class="amount">$ <%= monthly_expenses %></div>
+        </div>
+      </div>
+      <!-- Expense Section -->
+      <section class="expense-section">
+        <h2>All Expenses</h2>
+        <ul class="expense-list">
+          <% expenses.forEach(expense => { %>
+            <li class="expense-item">
+              <div class="expense-info">
+                <span class="expense-title"><strong><%= expense.title %></strong></span>
+                <span class="expense-amount">$<%= expense.amount %></span>
+                <span class="expense-category"><%= expense.category %></span>
+                  <% const date = new Date(expense.date); %>
+                  <span class="expense-category">
+                    <!-- Format as DD MMM YYYY (e.g., 04 Nov 2024) -->
+                    <p><%= date.getDate() + ' ' + date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear() %></p>
+                  </span>
+              </div>
+              <form action="/api/v1/expenses/<%= expense.id %>?_method=DELETE" method="POST" class="delete-form">
+                <input type="hidden" name="_id" value="<%= expense.id %>">
+                <button class="delete-btn" type="submit">Delete</button>
+              </form>
+            </li>
+          <% }) %>
+        </ul>
+      </section>
+      <% } %>
   </div>
 
   <!-- Add Expense Popup -->
@@ -436,6 +459,29 @@ document.querySelectorAll('.delete-form').forEach(form => {
         alert('Failed to add expense. Please try again.');
       }
     });
+
+    // Logout Event Listener
+document.getElementById('logout-btn').addEventListener('click', async () => {
+  try {
+    console.log('button-clicked')
+    const response = await fetch('/api/v1/user/signout', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
+
+    if (response.ok) {
+      window.location.href = '/'; // Redirect to the homepage or login page after signout
+    } else {
+      throw new Error('Failed to log out');
+    }
+  } catch (error) {
+    console.error('Error:', error);
+    alert('Failed to log out. Please try again.');
+  }
+});
+
   </script>
 </body>
 </html>

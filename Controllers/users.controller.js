@@ -51,22 +51,42 @@ const accessToken = jwt.sign({
     const total_expenses = await TotalExpenses(user.id)
     const monthly_expenses = await MonthlyExpenses(user.id)
 
-    return res.cookie('accessToken',accessToken).cookie('refreshtoken',refreshToken).render('home',{
-        user:user,
-        expenses:expenses,
-      total_expenses:total_expenses,
-      monthly_expenses:monthly_expenses
-      
+
+    return res.cookie('accessToken',accessToken).cookie('refreshToken',refreshToken).render('home',{
+      user, 
+      expenses,
+      total_expenses,
+      monthly_expenses
     })
 })
 
 const signupuser = asyncHandler(async(req,res)=>{
     const { username , password , email } = req.body
+    if(!username || !password ||! email){
+        throw new CustomApiError(
+            400,
+            'All fields must be provided!'
+        )
+    }
     const user = await SignUpUser(username,email,password)
+    return res.render('signin')
 })
 
 
+const SignOut = asyncHandler(async (req, res) => {
+    try {
+        // Clear both tokens and redirect to the sign-in page
+        res.clearCookie('accessToken', { path: '/' });
+        res.clearCookie('refreshToken', { path: '/' });
+        return res.status(303).redirect('http://localhost:3000/api/v1/user/signin'); // Make sure this path matches the one that loads correctly
+    } catch (error) {
+        console.error('Error signing out:', error);
+        res.status(500).json({ message: 'Error signing out' });
+    }
+});
+
 module.exports ={
     loginuser,
-    signupuser
+    signupuser,
+    SignOut
 }
