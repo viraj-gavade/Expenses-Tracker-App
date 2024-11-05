@@ -44,6 +44,7 @@ const SignUpUser = async ( username , email , password )=>{
 }
 
 const findUser = async (id ) =>{
+    
     const user =  await pool.query(`
         SELECT * FROM users
         Where id =?
@@ -53,10 +54,28 @@ const findUser = async (id ) =>{
         return user[0]
 }
 
+const findUserByemail = async (username ) =>{
+    const user =  await pool.query(`
+        SELECT * FROM users
+        Where username =?
+        `,[username])
+        // console.log(user)
+        return user[0]
+}
 
+const AddUser = async ( username , email) =>{
+    const [user]= await pool.query(`INSERT INTO users (username, email) VALUES 
+(?, ?);
+`,[username,email])
+        console.log(user)
+    return user[0]
+}
+findUserByemail('gavadeviraj9@gmail.com')
 module.exports ={
     LoginUser,
     SignUpUser,
-    findUser
+    findUser,
+    AddUser,
+    findUserByemail
 
 }

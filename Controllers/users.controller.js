@@ -52,12 +52,7 @@ const accessToken = jwt.sign({
     const monthly_expenses = await MonthlyExpenses(user.id)
 
 
-    return res.cookie('accessToken',accessToken).cookie('refreshToken',refreshToken).render('home',{
-      user, 
-      expenses,
-      total_expenses,
-      monthly_expenses
-    })
+    return res.cookie('accessToken',accessToken).cookie('refreshToken',refreshToken).redirect('/api/v1/expenses')
 })
 
 const signupuser = asyncHandler(async(req,res)=>{

@@ -1,6 +1,6 @@
 const { json } = require('express')
 const { GetAllExpenses, DeleteAllExpenses, AddExpenses, GetSingleExpenses, DeleteSingleExpenses, SortExpenses, TotalExpenses,MonthlyExpenses } = require('../Database/database.expenses')
-
+const { findUser } = require('../Database/database.users')
 const asyncHandler = require('../utils/asyncHandler')
 
 const CustomApiError = require('../utils/CustomApiError')
@@ -11,21 +11,20 @@ const ApiResponse = require('../utils/CustomApiResponse')
 
 const getallexpenses = asyncHandler(async (req,res)=>{
    try {
+
+    const [{id}] = req.user
      const { sortBy , order } = req.query
      const expenses = await GetAllExpenses(sortBy,order)
      const total_expenses = await TotalExpenses()
      const monthly_expenses = await MonthlyExpenses()
+     const user = await findUser(id)
      if(!expenses){
         throw new CustomApiError(
             404,
             'Expenses Not Found!'
         )
      }
-    return res.render('home.ejs',{
-      expenses:expenses,
-      total_expenses:total_expenses,
-      monthly_expenses:monthly_expenses
-    })
+    
    } catch (error) {
      throw new Error(error)
    }
@@ -64,6 +63,8 @@ const getsingleexpense = asyncHandler(async (req,res)=>{
 
 const addexpense = asyncHandler(async (req,res)=>{
   try {
+
+      console.log(req.user)
       const [{id}] = req.user
       const { title , amount ,category } = req.body
       if(!(title || amount || category)){
