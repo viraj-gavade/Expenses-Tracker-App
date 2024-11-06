@@ -1,37 +1,40 @@
-const CustomApiError = require("../utils/CustomApiError")
-const jwt = require('jsonwebtoken')
-const {findUser} = require('../Database/database.users')
-const asyncHandler = require('../utils/asyncHandler')
+const CustomApiError = require("../utils/CustomApiError"); // Import custom error handling class
+const jwt = require('jsonwebtoken'); // Import JSON Web Token library
+const { findUser } = require('../Database/database.users'); // Import findUser function from database
+const asyncHandler = require('../utils/asyncHandler'); // Import asyncHandler to handle async functions
 
-
-const VerifyJwt = asyncHandler (async(req,res,next)=>{
+// Middleware to verify the JWT token
+const VerifyJwt = asyncHandler(async (req, res, next) => {
     try {
-        const token = req.cookies?.accessToken || req.header('Authorization')?.replace('Bearer ','')
-        // console.log(token)
+        // Get the token from cookies or Authorization header
+        const token = req.cookies?.accessToken || req.header('Authorization')?.replace('Bearer ', '');
 
-        if(!token){
-            // throw new CustomApiError(401,'Unauthorized Request')
-            return res.render('signup')
-
+        // If no token is found, render the signup page (unauthorized request)
+        if (!token) {
+            return res.render('signup');
         }
 
-        const decodedtoken =  jwt.verify(token,process.env.ACCESS_TOKEN_SECRETE)
+        // Verify the token using the secret key
+        const decodedtoken = jwt.verify(token, process.env.ACCESS_TOKEN_SECRETE);
 
-        const user = await findUser(decodedtoken.id)
+        // Find the user from the database using the decoded token's id
+        const user = await findUser(decodedtoken.id);
 
-        if(!user){
-            // throw new CustomApiError(401,'Invalid Access Token!')
-            return res.render('signup')
+        // If user is not found, render the signup page (invalid token)
+        if (!user) {
+            return res.render('signup');
         }
-        req.user = user
-        // console.log(user)
-        next()
-        
+
+        // Attach the user object to the request so that it can be accessed later
+        req.user = user;
+
+        // Proceed to the next middleware
+        next();
     } catch (error) {
-        console.log(error)
-        throw new CustomApiError(401,error?.messsage || 'Invalid access')
+        // Log the error and throw a custom API error for unauthorized access
+        console.log(error);
+        throw new CustomApiError(401, error?.message || 'Invalid access');
     }
-})
+});
 
-
-module.exports = VerifyJwt
+module.exports = VerifyJwt; // Export the middleware for use in routes
