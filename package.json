@@ -22,7 +22,7 @@
     "tailwindcss": "^3.4.14"
   },
   "scripts": {
-    "test": "nodemon app.js"
+    "test": "node app.js"
   },
   "author": "Viraj Gavade",
   "license": "ISC"
