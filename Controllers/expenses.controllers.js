@@ -9,27 +9,6 @@ const ApiResponse = require('../utils/CustomApiResponse')
 
 
 
-const getallexpenses = asyncHandler(async (req,res)=>{
-   try {
-
-    const [{id}] = req.user
-     const { sortBy , order } = req.query
-     const expenses = await GetAllExpenses(sortBy,order)
-     const total_expenses = await TotalExpenses()
-     const monthly_expenses = await MonthlyExpenses()
-     const user = await findUser(id)
-     if(!expenses){
-        throw new CustomApiError(
-            404,
-            'Expenses Not Found!'
-        )
-     }
-    
-   } catch (error) {
-     throw new Error(error)
-   }
-})
-
 const getsingleexpense = asyncHandler(async (req,res)=>{
   try {
       const { id } = req.params
@@ -63,9 +42,8 @@ const getsingleexpense = asyncHandler(async (req,res)=>{
 
 const addexpense = asyncHandler(async (req,res)=>{
   try {
-
       console.log(req.user)
-      // const [{id}] = req.user
+
       const id = req.user.id
       const { title , amount ,category } = req.body
       if(!(title || amount || category)){
@@ -161,7 +139,6 @@ const gettotalexpense = asyncHandler(async (req,res,next)=>{
 
 
 module.exports = {
-    getallexpenses,
     deletesingleexpense,
     deleteallexpense,
     addexpense,
