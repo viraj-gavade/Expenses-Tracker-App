@@ -10,7 +10,9 @@ const VerifyJwt = asyncHandler (async(req,res,next)=>{
         // console.log(token)
 
         if(!token){
-            throw new CustomApiError(401,'Unauthorized Request')
+            // throw new CustomApiError(401,'Unauthorized Request')
+            return res.render('signup')
+
         }
 
         const decodedtoken =  jwt.verify(token,process.env.ACCESS_TOKEN_SECRETE)
@@ -18,7 +20,8 @@ const VerifyJwt = asyncHandler (async(req,res,next)=>{
         const user = await findUser(decodedtoken.id)
 
         if(!user){
-            throw new CustomApiError(401,'Invalid Access Token!')
+            // throw new CustomApiError(401,'Invalid Access Token!')
+            return res.render('signup')
         }
         req.user = user
         // console.log(user)

@@ -10,30 +10,23 @@ ExpenseRouter.route('/expenses',).get(VerifyJwt,async(req,res)=>{
 
         // Fetch all expenses from the database
         try {
-            console.log(req.user)
-            const [{id}] = req.user
-             const { sortBy , order } = req.query
-             const expenses = await GetAllExpenses(sortBy,order)
-             const total_expenses = await TotalExpenses()
-             const monthly_expenses = await MonthlyExpenses()
+            console.log('Req user id ',req.user.id)
+            // const [{id}] = req.user
+            //  const { sortBy , order } = req.query
+             const expenses = await GetAllExpenses(req.user.id)
+             const total_expenses = await TotalExpenses(req.user.id)
+             const monthly_expenses = await MonthlyExpenses(req.user.id)
              const user = await findUser(req.user.id)
-             if(!expenses){
-                throw new CustomApiError(
-                    404,
-                    'Expenses Not Found!'
-                )
-             }
-            
-             res.render('home', { expenses ,total_expenses,monthly_expenses,user});
+            return res.render('home', { expenses ,total_expenses,monthly_expenses,user});
            } catch (error) {
              throw new Error(error)
            } // Assuming you have user ID from the JWT
         // Render the home page with the expenses data
     } catch (error) {
         console.error('Error fetching expenses:', error);
-        res.status(500).send('Internal Server Error');
+       return res.status(500).send('Internal Server Error');
     }
-    res.render('home')
+   return res.render('home')
 })
 .delete(VerifyJwt,deleteallexpense)
 .post(VerifyJwt,addexpense)

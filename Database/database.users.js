@@ -45,17 +45,17 @@ const SignUpUser = async ( username , email , password )=>{
 
 const findUser = async (id ) =>{
     
-    const user =  await pool.query(`
+    const [user] =  await pool.query(`
         SELECT * FROM users
         Where id =?
 
         `,[id])
-        console.log(user)
+        // console.log(user)
         return user[0]
 }
 
 const findUserByemail = async (username ) =>{
-    const user =  await pool.query(`
+    const [user] =  await pool.query(`
         SELECT * FROM users
         Where username =?
         `,[username])
@@ -68,7 +68,7 @@ const AddUser = async ( username , email) =>{
 (?, ?);
 `,[username,email])
         console.log(user)
-    return user[0]
+    return user
 }
 findUserByemail('gavadeviraj9@gmail.com')
 module.exports ={

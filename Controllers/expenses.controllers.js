@@ -65,7 +65,8 @@ const addexpense = asyncHandler(async (req,res)=>{
   try {
 
       console.log(req.user)
-      const [{id}] = req.user
+      // const [{id}] = req.user
+      const id = req.user.id
       const { title , amount ,category } = req.body
       if(!(title || amount || category)){
           throw new CustomApiError(
