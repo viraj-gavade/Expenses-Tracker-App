@@ -56,11 +56,11 @@ const findUser = async (id ) =>{
         return user[0]
 }
 
-const findUserByemail = async (username ) =>{
+const findUserByemail = async (email ) =>{
     const [user] =  await pool.query(`
         SELECT * FROM users
-        Where username =?
-        `,[username])
+        Where email =?
+        `,[email])
         // console.log(user)
         return user[0]
 }

@@ -58,7 +58,7 @@ OauthRouter.get('/auth/google/callback',async (req, res, next) => {
    
    console.log(`Name: ${name}`);
    console.log(`Email: ${Useremail}`); // Log user profile info
-   const Existing_User = await findUserByemail(name)
+   const Existing_User = await findUserByemail(Useremail)
    console.log(Existing_User)
    if(Existing_User.length == 0 ){
     const user = await AddUser(name,Useremail)
